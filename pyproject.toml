@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "qm_emma"
 version = "0.1.0"
-description = "Persistent GPU4PySCF backend for Amber QM/MM EXTERN calculations"
+description = "Persistent GPU4PySCF backend for AMBER QM/MM EXTERN calculations"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [

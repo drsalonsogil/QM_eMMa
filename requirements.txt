@@ -1,0 +1,4 @@
+# Default bootstrap requirements for qm_emma: CUDA 12.x
+# For CUDA 11.x or 13.x use requirements/cuda11.txt or requirements/cuda13.txt,
+# or run scripts/create_venv.sh --cuda 11|12|13.
+-r requirements/cuda12.txt
