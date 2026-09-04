@@ -418,6 +418,4 @@ job.
 
 ## License
 
-QM_eMMa is intended for distribution under the Apache License 2.0. Add the
-repository `LICENSE` file before the public release if it is not already
-present in the GitHub repository.
+QM_eMMa is intended for distribution under the Apache License 2.0. 
