@@ -1,8 +1,8 @@
 # qm_emma
 
-`qm_emma` is a persistent GPU4PySCF backend for Amber QM/MM calculations using Amber's `EXTERN` interface.
+`qm_emma` is a persistent GPU4PySCF backend for AMBER QM/MM calculations using Amber's `EXTERN` interface.
 
-The design goal is simple: Amber remains responsible for the molecular-mechanics dynamics and QM/MM bookkeeping, while one long-lived Python/GPU process performs the electronic-structure calculations. Reusing the previous converged density matrix and avoiding a new Python/GPU4PySCF process at every MD step removes a large amount of avoidable overhead.
+The design goal is simple: AMBER remains responsible for the molecular-mechanics dynamics and QM/MM bookkeeping, while one long-lived Python/GPU process performs the electronic-structure calculations. Reusing the previous converged density matrix and avoiding a new Python/GPU4PySCF process at every MD step removes a large amount of avoidable overhead.
 
 This repository contains only the **system-independent core**. Topologies, restarts, Amber input files, PLUMED inputs and scheduler scripts are intentionally not part of the core repository.
 
