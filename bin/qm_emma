@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# qm_emma lightweight Amber EXTERN shim.
+#
+# The GPU/Python process remains resident in qm_emma-daemon.  Amber launches
+# this tiny shell process for each EXTERN call; it only signals FIFOs and
+# streams the result back to Amber.
+set -euo pipefail
+
+VERSION="0.1.0"
+
+case "${1:-}" in
+  --version|-V)
+    echo "qm_emma ${VERSION}"
+    exit 0
+    ;;
+  install-amber-link)
+    target_dir="${2:-$PWD/.qm_emma/bin}"
+    mkdir -p "$target_dir"
+    target_dir="$(cd "$target_dir" && pwd)"
+    self="$(readlink -f "$0")"
+    ln -sfn "$self" "$target_dir/terachem"
+    printf '%s\n' "$target_dir/terachem"
+    exit 0
+    ;;
+esac
+
+: "${QM_EMMA_BRIDGE_REQ_FIFO:?QM_EMMA_BRIDGE_REQ_FIFO is not set}"
+: "${QM_EMMA_BRIDGE_RESULT_FIFO:?QM_EMMA_BRIDGE_RESULT_FIFO is not set}"
+: "${QM_EMMA_BRIDGE_DONE_FIFO:?QM_EMMA_BRIDGE_DONE_FIFO is not set}"
+: "${QM_EMMA_BRIDGE_PID:?QM_EMMA_BRIDGE_PID is not set}"
+TIMEOUT="${QM_EMMA_BRIDGE_TIMEOUT:-900}"
+
+kill -0 "$QM_EMMA_BRIDGE_PID" 2>/dev/null || {
+  echo "qm_emma daemon is not alive (pid=$QM_EMMA_BRIDGE_PID)" >&2
+  exit 70
+}
+
+inp=""
+for arg in "$@"; do
+  [[ "$arg" == --* ]] && continue
+  if [[ -f "$arg" ]]; then
+    inp="$arg"
+    break
+  fi
+done
+[[ -n "$inp" ]] || {
+  echo "No Amber EXTERN input deck found in argv: $*" >&2
+  exit 71
+}
+
+token="${SLURM_JOB_ID:-noj}_$$"
+
+# Keep DONE open read/write so the FIFO open itself never blocks.
+exec 9<>"$QM_EMMA_BRIDGE_DONE_FIFO"
+printf '%s\t%s\t%s\n' "$token" "$PWD" "$inp" > "$QM_EMMA_BRIDGE_REQ_FIFO"
+
+# The daemon opens RESULT after the electronic calculation is complete.
+cat "$QM_EMMA_BRIDGE_RESULT_FIFO"
+
+if ! IFS=$'\t' read -r -t "$TIMEOUT" done_token status <&9; then
+  echo "Timed out waiting for qm_emma daemon completion status" >&2
+  exit 72
+fi
+exec 9>&-
+
+[[ "$done_token" == "$token" ]] || {
+  echo "qm_emma bridge token mismatch: expected $token got $done_token" >&2
+  exit 73
+}
+
+[[ "$status" == "OK" ]] || {
+  [[ -f "${QM_EMMA_BRIDGE_ERROR_FILE:-}" ]] && cat "$QM_EMMA_BRIDGE_ERROR_FILE" >&2
+  exit 74
+}
