@@ -25,7 +25,7 @@ qm_emma/
 
 There is deliberately **no tracked executable named `terachem`** in the repository.
 
-### Why a compatibility symlink is still required with stock Amber
+### Why a compatibility symlink is still required with stock AMBER
 
 Amber's current EXTERN implementation used in this workflow invokes the historical executable name `terachem`. `qm_emma` does not use TeraChem; that name is only an Amber-side compatibility requirement.
 
@@ -42,14 +42,14 @@ creates a runtime-only symlink
 .qm_emma/bin/terachem -> .../bin/qm_emma
 ```
 
-so Amber reaches `qm_emma` without the repository containing a program with the historical name. A future Amber patch could remove even this compatibility link.
+so AMBER reaches `qm_emma` without the repository containing a program with the historical name. A future AMBER patch could remove even this compatibility link.
 
 ## Requirements
 
 The runtime environment must provide:
 
 - Linux
-- Amber with `sander` and QM/MM `EXTERN` support
+- AMBER with `sander` and QM/MM `EXTERN` support
 - an NVIDIA GPU supported by the installed CUDA stack
 - Python >= 3.10
 - NumPy
@@ -100,7 +100,7 @@ QM_EMMA_BRIDGE_TIMEOUT=900
 
 `QM_EMMA_DM_PREDICTOR=linear` exists as an experimental option. The validated production setting is `previous`.
 
-## Amber input
+## AMBER input
 
 A system-specific Amber input still defines the QM region and QM/MM treatment. A minimal schematic example is:
 
@@ -125,11 +125,11 @@ A system-specific Amber input still defines the QM region and QM/MM treatment. A
 /
 ```
 
-The `&tc` namelist name is also inherited from Amber's existing EXTERN interface; it does not imply that TeraChem is used.
+The `&tc` namelist name is also inherited from AMBER's existing EXTERN interface; it does not imply that TeraChem is used.
 
-All ordinary Amber choices such as timestep, thermostat, barostat, periodic treatment, link atoms, charge redistribution, restraints and PLUMED remain system/run inputs rather than `qm_emma` core settings.
+All ordinary AMBER choices such as timestep, thermostat, barostat, periodic treatment, link atoms, charge redistribution, restraints and PLUMED remain system/run inputs rather than `qm_emma` core settings.
 
-## Starting qm_emma around an Amber job
+## Starting qm_emma around an AMBER job
 
 See:
 
@@ -144,7 +144,7 @@ The fragment performs four operations:
 3. launches one persistent `qm_emma-daemon` process;
 4. exports the bridge variables used by the lightweight `qm_emma` shim.
 
-The actual Amber `sander` command then runs normally. At each EXTERN evaluation Amber launches only the tiny shell shim. Heavy Python, PySCF, GPU4PySCF and the CUDA context remain resident in the daemon.
+The actual AMBER `sander` command then runs normally. At each EXTERN evaluation Amber launches only the tiny shell shim. Heavy Python, PySCF, GPU4PySCF and the CUDA context remain resident in the daemon.
 
 ## Persistent-density policy
 
@@ -175,8 +175,8 @@ These diagnostics are independent of any particular MD system.
 
 ## Scope of this first repository
 
-The core intentionally does **not** yet generate Amber inputs, scheduler scripts or PLUMED files. The next layer can be a setup utility that asks for a topology/restart, QM mask, charge/spin, electronic method, MD protocol and scheduler resources, then creates a complete runnable calculation around this core.
+The core intentionally does **not** yet generate AMBER inputs, scheduler scripts or PLUMED files. The next layer can be a setup utility that asks for a topology/restart, QM mask, charge/spin, electronic method, MD protocol and scheduler resources, then creates a complete runnable calculation around this core.
 
 ## License
 
-No license is included in this initial repository skeleton. Choose and add the intended open-source license before making the repository public.
+Apache License 2.0
