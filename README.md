@@ -16,8 +16,6 @@ removes avoidable per-step overhead.
 > **Naming:** the project/manuscript name is **QM_eMMa**; the repository,
 > Python package and command-line tools use the lowercase name `qm_emma`.
 
-> **Repository logo on GitHub:** this logo is displayed at the top of the README. GitHub does not allow repository files to modify the page header itself, but the same image can also be set manually as the repository **Social preview** in **Settings → General** if you want it to appear in link previews and repository metadata cards.
-
 ## Repository layout
 
 ```text
