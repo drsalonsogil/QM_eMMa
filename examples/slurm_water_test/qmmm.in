@@ -1,0 +1,35 @@
+QM_eMMa minimal water-box smoke test: 5 short QM/MM MD steps
+&cntrl
+  imin=0,
+  irest=0,
+  ntx=1,
+  nstlim=5,
+  dt=0.0005,
+  ntc=1,
+  ntf=1,
+  ntb=1,
+  ntp=0,
+  ntt=3,
+  gamma_ln=5.0,
+  temp0=300.0,
+  tempi=300.0,
+  cut=8.0,
+  ntpr=1,
+  ntwx=0,
+  ntwr=5,
+  ifqnt=1,
+/
+&qmmm
+  qmmask=':1',
+  qmcharge=0,
+  spin=1,
+  qm_theory='EXTERN',
+  qmmm_int=1,
+  qmcut=8.0,
+  qm_ewald=0,
+  qmshake=0,
+/
+&tc
+  method='pbe',
+  basis='def2-svp',
+/

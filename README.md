@@ -36,6 +36,20 @@ qm_emma/
 │   └── engine.py                  # GPU4PySCF electronic-structure engine
 └── examples/
     ├── amber_extern_job_fragment.sh
+    ├── local_water_test/              # 5-step local GPU smoke test
+    │   ├── .gitignore
+    │   ├── README.md
+    │   ├── build_system.sh
+    │   ├── qmmm.in
+    │   ├── run_local.sh
+    │   └── water_seed.pdb
+    ├── slurm_water_test/              # same test through sbatch/Slurm
+    │   ├── .gitignore
+    │   ├── README.md
+    │   ├── build_system.sh
+    │   ├── qmmm.in
+    │   ├── submit.slurm
+    │   └── water_seed.pdb
     └── quickstart/
         ├── README.md
         ├── qmmm.in.template
@@ -173,6 +187,42 @@ qm_emma --version
 qm_emma-daemon --help
 python scripts/check_environment.py
 ```
+
+### Minimal end-to-end water-box examples
+
+Two deliberately small examples are provided under `examples/` so the AMBER
+`EXTERN` bridge can be tested before preparing a real system. Both create a
+periodic TIP3P water box with `tleap`, select residue `:1` (one neutral H2O) as
+the QM region, leave the remaining waters as MM point charges, and run only
+**5 QM/MM MD steps** with PBE/def2-SVP. These are integration/smoke tests, not
+production simulation protocols.
+
+For a local Linux GPU machine:
+
+```bash
+cd examples/local_water_test
+./build_system.sh
+AMBER_SETUP=/path/to/amber.sh \
+QM_EMMA_VENV=$HOME/.venvs/qm_emma \
+./run_local.sh
+```
+
+If AMBER and the `qm_emma` venv are already active, simply run
+`./run_local.sh`; it will also build the water box automatically if
+`system.prmtop` and `start.rst7` are absent.
+
+For a Slurm/sbatch cluster:
+
+```bash
+cd examples/slurm_water_test
+sbatch --export=ALL,AMBER_SETUP=/path/to/amber.sh,QM_EMMA_VENV=$HOME/.venvs/qm_emma submit.slurm
+```
+
+The Slurm script requests one GPU and is intentionally generic. Adjust the
+`#SBATCH` resource lines and module/environment setup to the local scheduler.
+If FIFO traffic on the submission filesystem is undesirable, set
+`QM_EMMA_STATE_DIR` to node-local scratch. Each example has its own README with
+the expected output and diagnostic files.
 
 ## 3. Prepare a QM/MM calculation directory
 
