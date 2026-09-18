@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/qm_emma_logo.png" alt="QM_eMMa logo" width="420">
+</p>
+
 # QM_eMMa (`qm_emma`)
 
 `qm_emma` is a persistent GPU4PySCF backend for **AMBER QM/MM** calculations
@@ -12,6 +16,8 @@ removes avoidable per-step overhead.
 > **Naming:** the project/manuscript name is **QM_eMMa**; the repository,
 > Python package and command-line tools use the lowercase name `qm_emma`.
 
+> **Repository logo on GitHub:** this logo is displayed at the top of the README. GitHub does not allow repository files to modify the page header itself, but the same image can also be set manually as the repository **Social preview** in **Settings → General** if you want it to appear in link previews and repository metadata cards.
+
 ## Repository layout
 
 ```text
@@ -19,6 +25,8 @@ qm_emma/
 ├── README.md
 ├── pyproject.toml
 ├── requirements.txt              # default CUDA 12 bootstrap
+├── assets/
+│   └── qm_emma_logo.png          # logo shown at top of README
 ├── requirements/
 │   ├── cuda11.txt
 │   ├── cuda12.txt
