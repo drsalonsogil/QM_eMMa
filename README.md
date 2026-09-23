@@ -13,6 +13,11 @@ performs the electronic-structure calculations. Reusing the previous converged
 density matrix and avoiding a new Python/GPU4PySCF process at every MD step
 removes avoidable per-step overhead.
 
+## Citation
+
+Santiago Alonso-Gil. QM_eMMa: An Open GPU-Accelerated Framework for Ab Initio QM/MM Molecular Dynamics and Enhanced Sampling. ChemRxiv. 21 September 2026.
+DOI: https://doi.org/10.26434/chemrxiv.15009206/v1
+
 > **Naming:** the project/manuscript name is **QM_eMMa**; the repository,
 > Python package and command-line tools use the lowercase name `qm_emma`.
 
